@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Сценарий защиты «Додо Пиццы»</title>
+<meta name="description" content="Текст выступления для четырёх спикеров по презентации «Анализ бизнес-процессов „Додо Пиццы“», с вопросами комиссии и ответами.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='32' fill='%23D9530A'/%3E%3Ctext x='32' y='43' font-family='Arial,sans-serif' font-size='30' font-weight='700' fill='%23fff' text-anchor='middle'%3E%D0%94%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Base reset */
+:root { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+
+/* Layout: one reading column (~66ch), sticky speaker switcher, script grouped speaker → slide, then Q&A and prep list */
+:root {
+  --bg: #FFFFFF;
+  --surface: #F5F3F1;
+  --line: #E7E2DD;
+  --ink: #1D1A17;
+  --muted: #6C645D;
+  --accent: #D9530A;
+  --accent-soft: #FCEBDF;
+  --badge-ink: #FFFFFF;
+  --shadow: 0 1px 3px rgba(40, 20, 5, .14);
+  --s1: #D9530A;
+  --s2: #0E7A6B;
+  --s3: #5747C2;
+  --s4: #B02257;
+  --font-display: "Unbounded", "Golos Text", system-ui, sans-serif;
+  --font-body: "Golos Text", "PT Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fs-read: 18px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141210; --surface: #1F1C19; --line: #36312C; --ink: #EEEAE5; --muted: #A69E96;
+    --accent: #FF8A3D; --accent-soft: #3A2416; --badge-ink: #16110D; --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+    --s1: #FF8A3D; --s2: #3CC2AE; --s3: #A397FF; --s4: #F2709F;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141210; --surface: #1F1C19; --line: #36312C; --ink: #EEEAE5; --muted: #A69E96;
+  --accent: #FF8A3D; --accent-soft: #3A2416; --badge-ink: #16110D; --shadow: 0 1px 3px rgba(0, 0, 0, .5);
+  --s1: #FF8A3D; --s2: #3CC2AE; --s3: #A397FF; --s4: #F2709F;
+  color-scheme: dark;
+}
+:root.large { --fs-read: 22px; }
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 16px; line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+  z-index: 10; background: var(--bg);
+}
+.wrap {
+  max-width: 800px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+
+.sp1 { --c: var(--s1); } .sp2 { --c: var(--s2); } .sp3 { --c: var(--s3); } .sp4 { --c: var(--s4); } .spall { --c: var(--muted); }
+.badge {
+  flex: none; width: 34px; height: 34px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--c); color: var(--badge-ink);
+  font-family: var(--font-display); font-weight: 700; font-size: 15px; line-height: 1;
+}
+.badge.big { width: 54px; height: 54px; font-size: 22px; }
+.badge.small { width: 26px; height: 26px; font-size: 12px; }
+
+/* Hero */
+.hero { padding-block: 40px 24px; display: grid; gap: 12px; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(30px, 6.2vw, 46px); line-height: 1.08; letter-spacing: -.01em;
+  margin: 0; text-wrap: balance;
+}
+.lede { font-size: 18px; color: var(--muted); margin: 0; max-width: 60ch; text-wrap: pretty; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 4px 0 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; }
+.facts b { font-family: var(--font-display); font-weight: 500; font-size: 20px; margin-right: 6px; }
+
+/* Plan */
+.plan { display: grid; gap: 12px; grid-template-columns: 1fr; padding-bottom: 24px; }
+@media (min-width: 480px) { .plan { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 860px) { .plan { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.card {
+  text-align: left; background: var(--surface); border: 1.5px solid transparent; border-radius: 14px;
+  padding: 16px; display: grid; gap: 6px; align-content: start; min-width: 0;
+}
+.card:hover { border-color: var(--line); }
+.card[aria-pressed="true"] { border-color: var(--c); }
+.card .who { font-weight: 600; font-size: 16px; overflow-wrap: anywhere; }
+.card .what { font-size: 14px; color: var(--muted); }
+.card .when { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* Toolbar */
+.toolbar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.toolbar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding-block: 10px; }
+.seg { display: inline-flex; gap: 2px; padding: 4px; background: var(--surface); border-radius: 999px; }
+.seg button {
+  border: 0; background: transparent; border-radius: 999px; padding: 7px 14px; min-width: 42px;
+  font-weight: 600; font-size: 15px; color: var(--muted);
+}
+.seg button[aria-pressed="true"] { background: var(--bg); color: var(--ink); box-shadow: var(--shadow); }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; margin-left: auto; }
+.tool {
+  border: 1px solid var(--line); background: var(--bg); border-radius: 999px;
+  padding: 7px 12px; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums;
+}
+.tool[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.status { flex-basis: 100%; font-size: 13px; color: var(--muted); margin: 0; }
+
+/* Speech */
+.speaker { padding-top: 44px; }
+.speaker-head { display: flex; gap: 16px; align-items: center; padding-bottom: 8px; }
+.speaker-head h2 { font-family: var(--font-display); font-weight: 500; font-size: 24px; line-height: 1.2; margin: 0; overflow-wrap: anywhere; }
+.speaker-head .meta { color: var(--muted); font-size: 14px; margin-top: 4px; font-variant-numeric: tabular-nums; }
+.slide { border-top: 1px solid var(--line); padding-block: 20px 8px; }
+.cue { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; }
+.cue .num { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--c); font-variant-numeric: tabular-nums; }
+.cue .ttl { font-size: 15px; font-weight: 600; color: var(--muted); }
+.slide p { font-size: var(--fs-read); line-height: 1.62; max-width: 66ch; margin: 12px 0; text-wrap: pretty; }
+.slide p strong { font-weight: 600; }
+.slide p.stage { font-size: 14px; line-height: 1.4; font-style: italic; color: var(--muted); margin: 14px 0 -4px; }
+.slide .handover {
+  background: var(--accent-soft); border-radius: 12px; padding: 12px 16px; margin: 16px 0 12px;
+  font-weight: 600; max-width: 66ch;
+}
+.handover .label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 2px; }
+
+/* Q&A */
+.block { padding-top: 56px; }
+.block > h2 { font-family: var(--font-display); font-weight: 500; font-size: 26px; margin: 0 0 6px; }
+.block > .intro { color: var(--muted); margin: 0 0 16px; max-width: 62ch; }
+.qa details { border-top: 1px solid var(--line); }
+.qa details:last-of-type { border-bottom: 1px solid var(--line); }
+.qa summary {
+  list-style: none; cursor: pointer; display: flex; gap: 12px; align-items: flex-start;
+  padding-block: 14px; font-weight: 600; font-size: 17px; line-height: 1.4;
+}
+.qa summary::-webkit-details-marker { display: none; }
+.qa summary .q { flex: 1; min-width: 0; }
+.qa summary .chev { flex: none; color: var(--muted); transition: transform .15s; }
+.qa details[open] .chev { transform: rotate(90deg); }
+.qa .a { padding: 0 0 14px 38px; }
+.qa .a p { font-size: var(--fs-read); line-height: 1.6; margin: 0 0 10px; max-width: 64ch; }
+.qa .a .by { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
+
+/* Prep */
+.prep ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.prep li { background: var(--surface); border-radius: 12px; padding: 14px 16px; max-width: 70ch; }
+.prep li b { display: block; margin-bottom: 4px; }
+.prep li span { color: var(--muted); }
+
+footer { padding-block: 48px 40px; color: var(--muted); font-size: 13px; }
+
+@media (prefers-reduced-motion: reduce) { .qa summary .chev { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <div class="eyebrow">Семестровая работа · группа ММ 1-1</div>
+  <h1>Сценарий защиты «Додо Пиццы»</h1>
+  <p class="lede">Текст выступления для четырёх спикеров по презентации «Анализ бизнес-процессов „Додо Пиццы“». Каждый ведёт одно задание.</p>
+  <ul class="facts">
+    <li><b>4</b>спикера</li>
+    <li><b>14</b>слайдов</li>
+    <li><b>≈ 11</b>минут без вопросов</li>
+  </ul>
+</header>
+
+<nav class="wrap plan" aria-label="Кто что рассказывает">
+  <button class="card sp1" type="button" data-go="1" aria-pressed="false">
+    <span class="badge">1</span>
+    <span class="who">Алексей Слепцов</span>
+    <span class="what">Вступление и задание 1: описание компании</span>
+    <span class="when">Слайды 1–5 · <span data-time="1"></span></span>
+  </button>
+  <button class="card sp2" type="button" data-go="2" aria-pressed="false">
+    <span class="badge">2</span>
+    <span class="who">Даниил Рубаненко</span>
+    <span class="what">Задание 2: цепочка ценностей Портера</span>
+    <span class="when">Слайды 6–9 · <span data-time="2"></span></span>
+  </button>
+  <button class="card sp3" type="button" data-go="3" aria-pressed="false">
+    <span class="badge">3</span>
+    <span class="who">Владислав Дмитриев</span>
+    <span class="what">Задание 3: процесс «Приготовление заказа»</span>
+    <span class="when">Слайды 10–11 · <span data-time="3"></span></span>
+  </button>
+  <button class="card sp4" type="button" data-go="4" aria-pressed="false">
+    <span class="badge">4</span>
+    <span class="who">Лев Ненашев</span>
+    <span class="what">Задание 4: IDEF0 и заключение</span>
+    <span class="when">Слайды 12–14 · <span data-time="4"></span></span>
+  </button>
+</nav>
+
+<div class="toolbar">
+  <div class="wrap">
+    <div class="seg" role="group" aria-label="Показать текст спикера">
+      <button type="button" data-go="all" aria-pressed="true">Все</button>
+      <button type="button" data-go="1" aria-pressed="false" aria-label="Спикер 1">1</button>
+      <button type="button" data-go="2" aria-pressed="false" aria-label="Спикер 2">2</button>
+      <button type="button" data-go="3" aria-pressed="false" aria-label="Спикер 3">3</button>
+      <button type="button" data-go="4" aria-pressed="false" aria-label="Спикер 4">4</button>
+    </div>
+    <div class="tools">
+      <button class="tool" type="button" id="btn-large" aria-pressed="false">Крупный текст</button>
+      <button class="tool" type="button" id="btn-wake" aria-pressed="false">Не гасить экран</button>
+      <button class="tool" type="button" id="btn-timer" aria-pressed="false" aria-label="Секундомер для прогона">▶ 0:00</button>
+      <button class="tool" type="button" id="btn-reset">Сброс</button>
+    </div>
+    <p class="status" id="status" hidden></p>
+  </div>
+</div>
+
+<main class="wrap">
+
+
+  <!-- ============ SPEAKER 1 ============ -->
+  <section class="speaker sp1" data-who="1" id="s1">
+    <div class="speaker-head">
+      <span class="badge big">1</span>
+      <div>
+        <h2>Алексей Слепцов</h2>
+        <div class="meta">Слайды 1–5 · Вступление и задание 1 · <span data-time="1"></span></div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 1</span><span class="ttl">Титульный</span></div>
+      <p>Добрый день! Мы представляем семестровую работу «Анализ бизнес-процессов „Додо Пиццы“». Меня зовут Алексей Слепцов, со мной Даниил Рубаненко, Владислав Дмитриев и Лев Ненашев, мы из группы ММ 1-1.</p>
+      <p>В работе четыре задания, и каждый из нас расскажет об одном. Я опишу саму компанию. Даниил разложит её деятельность по цепочке ценностей Портера. Владислав подробно разберёт один процесс — приготовление заказа. А Лев покажет одну его процедуру в нотации IDEF0.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 2</span><span class="ttl">О компании</span></div>
+      <p>«Додо Пиццу» основал Фёдор Овчинников в <strong>2011 году в Сыктывкаре</strong>. Первая пиццерия работала только на доставку. Сегодня это международный холдинг <strong>Dodo Brands</strong>. С 2025 года он зарегистрирован в Казахстане, в Международном финансовом центре «Астана», а управление ведётся из Дубая. Генеральный директор — Дмитрий Соловьёв.</p>
+      <p>В холдинге четыре подразделения. Самое большое — «Додо Пицца Евразия»: Россия, Казахстан и Беларусь, <strong>1 266 пиццерий</strong>. Международное направление — 159 пиццерий в 23 странах. Сеть кофеен Drinkit — 148 точек. И собственное IT-подразделение: около 300 инженеров разрабатывают систему <strong>Додо ИС</strong>, на которой работает вся сеть.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 3</span><span class="ttl">Чем занимается компания</span></div>
+      <p>Основной продукт — пицца. К ней добавляются закуски, комбо-наборы, десерты и напитки, а в Drinkit — кофе. Услуги — доставка, зал и самовывоз. Заказать можно в приложении, им пользуются 9 миллионов человек в месяц.</p>
+      <p>У компании <strong>два типа клиентов</strong>. Гости покупают пиццу. А партнёры-франчайзи покупают право открыть пиццерию по стандартам Додо и работать в её IT-системе.</p>
+      <p>Отрасль — общественное питание, сегмент быстрого обслуживания, по-английски QSR. Компания работает в <strong>26 странах</strong>, значит, её деятельность межгосударственная.</p>
+      <p class="stage">[показать на диаграмму продаж по каналам]</p>
+      <p>Обратите внимание на диаграмму: <strong>63% продаж — это доставка</strong>. Эта цифра понадобится нам во втором задании.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 4</span><span class="ttl">Масштаб деятельности</span></div>
+      <p>На конец 2025 года в сети <strong>1 573 точки</strong>, из них 1 425 пиццерий. Оборот всей сети — <strong>144 миллиарда рублей</strong>, на 22% больше, чем годом раньше. Около 95% точек работают по франшизе. В сети около 70 тысяч сотрудников, средний чек — 951 рубль.</p>
+      <p>Здесь важно различать две цифры. Оборот сети — это продажи всех пиццерий, включая партнёрские. А выручка управляющей компании — <strong>18,1 миллиарда рублей</strong> — это роялти, сборы с партнёров и продажи собственных точек.</p>
+      <p>Вывод: Додо — <strong>крупное предприятие</strong>. По российским критериям граница — 2 миллиарда рублей выручки в год, а у одной только управляющей компании выручка в девять раз больше.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 5</span><span class="ttl">Роль в отрасли</span></div>
+      <p>Россия — главный рынок: на Евразию приходится <strong>92% оборота</strong>. В 2025 году Додо открыла больше заведений, чем любая другая сеть общепита в стране, — <strong>160 пиццерий</strong>. Это данные рейтинга INFOLine. В мире, по данным самой компании, Додо входит в десятку крупнейших сетей пиццерий.</p>
+      <p>От конкурентов её отличают технологии. Собственная облачная платформа Додо ИС ведёт заказы, кухню, доставку, закупки и аналитику и выдерживает до 1 040 заказов в минуту. Цель компании — <strong>4 000 точек к 2030 году</strong>.</p>
+      <p class="handover"><span class="label">Передача слова</span>Как устроена работа внутри компании, расскажет Даниил.</p>
+    </div>
+  </section>
+
+  <!-- ============ SPEAKER 2 ============ -->
+  <section class="speaker sp2" data-who="2" id="s2">
+    <div class="speaker-head">
+      <span class="badge big">2</span>
+      <div>
+        <h2>Даниил Рубаненко</h2>
+        <div class="meta">Слайды 6–9 · Задание 2 · <span data-time="2"></span></div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 6</span><span class="ttl">Цепочка ценностей Додо Пиццы</span></div>
+      <p>Спасибо. Во втором задании мы разложили деятельность Додо по <strong>цепочке ценностей Майкла Портера</strong>.</p>
+      <p class="stage">[показать нижний ряд]</p>
+      <p>Внизу — <strong>пять основных процессов</strong> в классическом порядке Портера: обеспечение поставок, выпуск продукции, обеспечение сбыта, маркетинг и продажи, послепродажное обслуживание. Через них проходит каждый заказ.</p>
+      <p class="stage">[показать верхний ряд]</p>
+      <p>Наверху — <strong>четыре вспомогательных процесса</strong>: инфраструктура, управление персоналом, развитие технологий и снабжение. Они поддерживают всю цепочку сразу.</p>
+      <p>Справа — маржа, то есть результат работы всей цепочки. Мы взяли скорректированную EBITDA управляющей компании за 2025 год: <strong>1,6 миллиарда рублей, или 9% выручки</strong>.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 7</span><span class="ttl">Основные процессы</span></div>
+      <p>Основные процессы почти все идут <strong>внутри пиццерии</strong>.</p>
+      <p>Обеспечение поставок: пиццерия принимает продукты от логистического оператора, проверяет сроки и температуру. Остатки считает Додо ИС.</p>
+      <p>Выпуск продукции: пиццу готовят <strong>только под заказ</strong>, по единой техкарте, а кухня работает под камерами.</p>
+      <p>Обеспечение сбыта: заказ передают курьеру или выдают в зале и на самовывозе. Две трети продаж — доставка, поэтому этот процесс для Додо очень важен.</p>
+      <p>Маркетинг и продажи разделены. Федеральную рекламу делает управляющая компания из общего маркетингового фонда, а местную — сама пиццерия.</p>
+      <p>Послепродажное обслуживание: оценки и отзывы в приложении, разбор жалоб, компенсация промокодами, программа лояльности и тайные покупатели. Всё это нужно, чтобы стандарт был одинаковым в каждой из полутора тысяч точек.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 8</span><span class="ttl">Вспомогательные процессы</span></div>
+      <p>Вспомогательные процессы почти полностью ведёт <strong>управляющая компания</strong>.</p>
+      <p>Здесь важно не путать два процесса с похожими названиями. <strong>Снабжение</strong> — это выбрать поставщика, провести тендер и заключить договор. Этим занимается центр. <strong>Обеспечение поставок</strong> — это физически принять продукты в пиццерии.</p>
+      <p>Самый сильный вспомогательный процесс у Додо — <strong>развитие технологий</strong>. Около 300 инженеров развивают Додо ИС и приложение, а ещё компания создаёт новые продукты.</p>
+      <p>Управление людьми: компания нанимает пиццамейкеров, кассиров, курьеров и менеджеров, обучает их на виртуальных тренажёрах и премирует по итогам проверок качества. Франчайзи обучают отдельно.</p>
+      <p>Инфраструктура — это управление холдингом и сетью, отбор партнёров, цели и отчётность по МСФО. И важная деталь: управляющая компания зарабатывает не на пицце, а на <strong>роялти, маркетинговом сборе и паушальных взносах</strong> партнёров, плюс продажи собственных точек.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 9</span><span class="ttl">Вывод по заданию 2</span></div>
+      <p>Отсюда главный вывод: <strong>ценность Додо — в системе, которая одинаково работает в полутора тысячах точек</strong>. Компания продаёт не только пиццу, но и способ одинаково готовить её в любой стране.</p>
+      <p>Во-первых, все девять процессов связывает одна IT-система — Додо ИС.</p>
+      <p>Во-вторых, роли разделены: основные процессы ведёт пиццерия, вспомогательные — управляющая компания.</p>
+      <p>В-третьих, ключевые процессы — выпуск продукции и сбыт. 63% продаж — это доставка, и гостю важнее всего скорость и качество.</p>
+      <p>Поэтому для третьего и четвёртого заданий мы выбрали процесс <strong>«Выпуск продукции: приготовление заказа»</strong>.</p>
+      <p class="handover"><span class="label">Передача слова</span>Его подробно разберёт Владислав.</p>
+    </div>
+  </section>
+
+  <!-- ============ SPEAKER 3 ============ -->
+  <section class="speaker sp3" data-who="3" id="s3">
+    <div class="speaker-head">
+      <span class="badge big">3</span>
+      <div>
+        <h2>Владислав Дмитриев</h2>
+        <div class="meta">Слайды 10–11 · Задание 3 · <span data-time="3"></span></div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 10</span><span class="ttl">Процедуры 1–3: от заказа до сборки пиццы</span></div>
+      <p>Спасибо. Процесс «Приготовление заказа» начинается, когда заказ попадает на кухню, и заканчивается, когда готовый заказ отдают курьеру или гостю. <strong>Владелец процесса — менеджер смены</strong>: он отвечает за результат всей кухни.</p>
+      <p>Мы разбили процесс на <strong>шесть процедур</strong>. Для каждой указали вход и выход, поставщика и клиента, требования к ним, ответственного и измеримый показатель.</p>
+      <p><strong>Первая процедура — приём заказа на кухню.</strong> Додо ИС сразу выводит заказ на планшеты кухни, с размером и техкартой. Показатель — время до начала раскатки.</p>
+      <p><strong>Вторая — раскатка теста.</strong> Раскатчик берёт тесто, которое прошло расстойку и не вышло из срока годности, и делает основу нужного диаметра и толщины без разрывов. Показатели — время раскатки и доля брака.</p>
+      <p><strong>Третья — сборка пиццы.</strong> Пиццамейкер кладёт соус, сыр и начинки строго по техкарте и граммовке. Показатель — доля пицц, собранных по техкарте.</p>
+      <p class="stage">[показать столбцы «Поставщик» и «Клиент»]</p>
+      <p>Обратите внимание на столбцы «Поставщик» и «Клиент». В них стоят соседние этапы и процессы. Например, заказ приходит из процесса «Маркетинг и продажи». <strong>Так таблица связана с цепочкой Портера.</strong></p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 11</span><span class="ttl">Процедуры 4–6: от печи до курьера</span></div>
+      <p><strong>Четвёртая процедура — выпекание.</strong> Печь работает автоматически, пицца должна пропечься равномерно, без дефектов бортика. Качество теста по фото оценивает нейросеть — от 0 до 10 баллов.</p>
+      <p><strong>Пятая — нарезка и упаковка.</strong> Нарезка ровная, пицца выглядит как на фото в меню, на коробке номер заказа. Показатель — доля жалоб на внешний вид.</p>
+      <p><strong>Шестая — передача заказа.</strong> Менеджер смены проверяет, что все позиции готовы, и отдаёт заказ курьеру или гостю. Курьер — это уже клиент следующего процесса, обеспечения сбыта.</p>
+      <p>Для всего процесса <strong>главный показатель — время</strong>. Кухня должна успеть так, чтобы заказ доехал до гостя за 60 минут. Для кухни мы взяли условный норматив — 15 минут. По словам франчайзи в 2019 году, опаздывали 10–15 заказов из 3–4 тысяч в месяц, это меньше половины процента. Ещё два показателя процесса — доля заказов без жалоб и доля опозданий.</p>
+      <p class="handover"><span class="label">Передача слова</span>Одну из процедур, сборку пиццы, мы показали в нотации IDEF0. Об этом расскажет Лев.</p>
+    </div>
+  </section>
+
+  <!-- ============ SPEAKER 4 ============ -->
+  <section class="speaker sp4" data-who="4" id="s4">
+    <div class="speaker-head">
+      <span class="badge big">4</span>
+      <div>
+        <h2>Лев Ненашев</h2>
+        <div class="meta">Слайды 12–14 · Задание 4 и заключение · <span data-time="4"></span></div>
+      </div>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 12</span><span class="ttl">Контекстная диаграмма A3 «Собрать пиццу»</span></div>
+      <p>Спасибо. Весь процесс приготовления заказа на диаграммах — это узел <strong>A0</strong>, его шесть процедур — блоки от A1 до A6. Сборка пиццы — третья процедура, поэтому её номер <strong>A3</strong>. На слайде её контекстная диаграмма.</p>
+      <p>В IDEF0 у каждой стороны блока свой смысл.</p>
+      <p class="stage">[показывать стрелки по очереди: слева, сверху, снизу, справа]</p>
+      <p><strong>Слева — вход</strong>, то, что мы превращаем: раскатанная основа из A2, соус, сыр и начинки.</p>
+      <p><strong>Сверху — управление</strong>, то есть правила. Заказ говорит, какую пиццу собрать. Техкарта в Додо ИС — сколько и чего положить. Стандарты Додо и СанПиН задают требования к качеству и гигиене.</p>
+      <p><strong>Снизу — механизмы</strong>, то есть кто и чем работает: пиццамейкер, холодильный стол с ингредиентами, планшет и камера.</p>
+      <p><strong>Справа — выход.</strong> Собранная пицца уходит в A4 «Выпечь», в Додо ИС появляется отметка «собрано», а если пицца не по стандарту, её отправляют в брак, на переделку.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 13</span><span class="ttl">Декомпозиция A3: четыре шага сборки</span></div>
+      <p>Если раскрыть блок A3, получится <strong>четыре шага</strong>: A31 — нанести соус, A32 — посыпать сыром, A33 — разложить начинку, A34 — проверить и передать в печь.</p>
+      <p>Блоки стоят лесенкой, потому что <strong>выход каждого шага — это вход следующего</strong>: основа с соусом идёт на сыр, с сыром — на начинку, с начинкой — на проверку.</p>
+      <p>Заказ и техкарта управляют всеми четырьмя шагами. Стандарты и СанПиН подведены к шагу проверки: именно там пиццу сверяют со стандартом. Там же работают планшет и камера. Пиццамейкер и холодильный стол — механизмы первых трёх шагов.</p>
+      <p>Внешние стрелки здесь те же, что на контекстной диаграмме. Это <strong>обязательное правило IDEF0</strong>: при декомпозиции ничего не появляется и не теряется.</p>
+    </div>
+
+    <div class="slide">
+      <div class="cue"><span class="num">Слайд 14</span><span class="ttl">Заключение и источники</span></div>
+      <p>Подведём итог. Мы описали «Додо Пиццу» как крупное межгосударственное предприятие, которое продаёт не только пиццу, но и систему управления пиццерией. Разложили её деятельность по цепочке Портера и увидели, что все процессы держатся на собственной IT-платформе. Разбили процесс приготовления заказа на шесть процедур с измеримыми показателями и показали сборку пиццы в нотации IDEF0.</p>
+      <p>Основные цифры взяты из годового отчёта Dodo Brands за 2025 год. Данные о работе кухни — из интервью и публикаций 2018–2019 годов, поэтому часть нормативов мы обозначили как условные.</p>
+      <p><strong>Спасибо за внимание! Мы готовы ответить на вопросы.</strong></p>
+    </div>
+  </section>
+
+  <!-- ============ Q&A ============ -->
+  <section class="block qa" id="voprosy">
+    <h2>Вопросы комиссии</h2>
+    <p class="intro">Вероятные вопросы и короткие ответы. Отвечает тот, кто вёл эту часть: 1 — Алексей, 2 — Даниил, 3 — Владислав, 4 — Лев.</p>
+
+    <details class="sp1" data-who="1">
+      <summary><span class="badge small">1</span><span class="q">Почему вы отнесли компанию к крупным?</span><span class="chev">›</span></summary>
+      <div class="a"><p>По постановлению Правительства РФ № 265 средний бизнес — это до 2 миллиардов рублей дохода в год и до 250 сотрудников. У одной управляющей компании выручка 18,1 миллиарда, в девять раз выше порога. Численность в сети около 70 тысяч, но большая часть людей работает у франчайзи, поэтому главный аргумент — выручка.</p></div>
+    </details>
+    <details class="sp1" data-who="1">
+      <summary><span class="badge small">1</span><span class="q">Чем оборот сети отличается от выручки управляющей компании?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Оборот сети, 144 миллиарда, — это продажи всех пиццерий, включая партнёрские. Выручка управляющей компании, 18,1 миллиарда, — это то, что получает сама компания: роялти и сборы с франчайзи, паушальные взносы и продажи собственных точек.</p></div>
+    </details>
+    <details class="sp1" data-who="1">
+      <summary><span class="badge small">1</span><span class="q">Что такое роялти и паушальный взнос?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Паушальный взнос — разовый платёж партнёра за вход во франшизу. Роялти — регулярный процент от выручки пиццерии, который партнёр платит за бренд, стандарты и Додо ИС. Ещё есть маркетинговый сбор: тоже процент от выручки, из него оплачивается федеральная реклама.</p></div>
+    </details>
+    <details class="sp1" data-who="1">
+      <summary><span class="badge small">1</span><span class="q">Почему деятельность межгосударственная, если 92% оборота — Евразия?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Компания работает в 26 странах, и у неё есть отдельное международное подразделение на 23 страны. Доля оборота показывает, где основной рынок, но не меняет того, что точки работают в разных государствах.</p></div>
+    </details>
+
+    <details class="sp2" data-who="2">
+      <summary><span class="badge small">2</span><span class="q">Почему маркетинг и продажи стоят после выпуска и сбыта, если пиццу сначала заказывают?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Это классический порядок блоков у Портера: он перечисляет виды деятельности, а не шаги во времени. В Додо на деле заказ идёт первым, пиццу готовят только под заказ. Поэтому в таблице задания 3 поставщик заказа — процесс «Маркетинг и продажи».</p></div>
+    </details>
+    <details class="sp2" data-who="2">
+      <summary><span class="badge small">2</span><span class="q">Чем снабжение отличается от обеспечения поставок?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Снабжение — вспомогательный процесс: выбрать поставщика, провести тендер, заключить договор. Его ведёт управляющая компания. Обеспечение поставок — основной процесс: принять продукты в пиццерии, проверить сроки и температуру, разложить на хранение.</p></div>
+    </details>
+    <details class="sp2" data-who="2">
+      <summary><span class="badge small">2</span><span class="q">Почему маржа — EBITDA управляющей компании, а не прибыль всей сети?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Около 95% точек принадлежат франчайзи, их прибыль публично не раскрывается. Отчётность по МСФО публикует только холдинг. Поэтому мы взяли проверяемую цифру: скорректированная EBITDA 1,6 миллиарда при выручке 18,1 миллиарда, это около 9%.</p></div>
+    </details>
+    <details class="sp2" data-who="2">
+      <summary><span class="badge small">2</span><span class="q">Почему Додо ИС — это развитие технологий, а не инфраструктура?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Инфраструктура у Портера — общее управление, финансы и планирование. Додо ИС компания сама разрабатывает и постоянно улучшает, этим заняты около 300 инженеров. Это создание технологии, поэтому процесс относится к развитию технологий.</p></div>
+    </details>
+
+    <details class="sp3" data-who="3">
+      <summary><span class="badge small">3</span><span class="q">Почему владелец процесса — менеджер смены?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Исполнители у процедур разные: раскатчик, пиццамейкер, печь. А результат один: заказ готов вовремя и без ошибок. За этот результат на смене отвечает менеджер, он же распределяет людей и сам отдаёт заказ.</p></div>
+    </details>
+    <details class="sp3" data-who="3">
+      <summary><span class="badge small">3</span><span class="q">Откуда норматив 15 минут на кухню?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Официального норматива для кухни Додо не публикует. Известен ориентир для гостя — заказ должен доехать за 60 минут. Мы выделили из этого времени 15 минут на кухню и честно пометили норматив как условный, методичка это допускает.</p></div>
+    </details>
+    <details class="sp3" data-who="3">
+      <summary><span class="badge small">3</span><span class="q">Где в процессе узкое место и что бы вы улучшили?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Узкое место — сборка в часы пик: заказы приходят пачкой, а пиццамейкеров на смене ограниченное число. Додо ИС хранит историю заказов по часам. По ней можно заранее планировать число людей на смене и объём заготовок, чтобы время на кухне в пик не росло.</p></div>
+    </details>
+    <details class="sp3" data-who="3">
+      <summary><span class="badge small">3</span><span class="q">Как таблица связана с цепочкой ценностей?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Через столбцы «Поставщик» и «Клиент». Поставщик первой процедуры — процесс «Маркетинг и продажи», откуда приходит заказ. Клиент последней — курьер, то есть процесс «Обеспечение сбыта». Внутри процесса каждая процедура — клиент предыдущей.</p></div>
+    </details>
+
+    <details class="sp4" data-who="4">
+      <summary><span class="badge small">4</span><span class="q">Чем вход отличается от управления и механизма?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Вход в ходе работы превращается в выход: основа, соус и сыр становятся пиццей. Управление не расходуется, оно говорит, как делать: заказ, техкарта, стандарты. Механизм — тот, кто и чем выполняет работу: человек и оборудование. Он тоже не расходуется.</p></div>
+    </details>
+    <details class="sp4" data-who="4">
+      <summary><span class="badge small">4</span><span class="q">На контекстной диаграмме «Соус и сыр» — одна стрелка, а на декомпозиции две. Почему?</span><span class="chev">›</span></summary>
+      <div class="a"><p>В IDEF0 стрелку можно разветвить: одна граничная стрелка «Соус и сыр» делится на «Соус» для A31 и «Сыр» для A32. Так же можно объединять: три стрелки управления на контекстной диаграмме на декомпозиции идут как «Заказ и техкарта» и «Стандарты, СанПиН». Смысл стрелок не меняется.</p></div>
+    </details>
+    <details class="sp4" data-who="4">
+      <summary><span class="badge small">4</span><span class="q">Кто выполняет проверку A34, если пиццамейкер к ней не подведён?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Проверяет тот же пиццамейкер, стрелку механизма можно продлить и к A34. На схеме мы показали главные средства проверки — планшет с техкартой и камеру, а стандарты и СанПиН подвели к этому шагу, потому что сверка со стандартом происходит именно там.</p></div>
+    </details>
+    <details class="sp4" data-who="4">
+      <summary><span class="badge small">4</span><span class="q">Почему на декомпозиции четыре блока и что значат номера A0, A3, A31?</span><span class="chev">›</span></summary>
+      <div class="a"><p>IDEF0 рекомендует от трёх до шести блоков на диаграмме, а сборка естественно делится на четыре шага. A0 — весь процесс, A3 — его третья процедура, A31–A34 — шаги внутри A3. Номер блока показывает, из какой диаграммы он раскрыт.</p></div>
+    </details>
+    <details class="sp4" data-who="all">
+      <summary><span class="badge small">4</span><span class="q">Откуда данные?</span><span class="chev">›</span></summary>
+      <div class="a"><p>Основные цифры — из годового отчёта Dodo Brands за 2025 год, он вышел 12 марта 2026 года. Рейтинг открытий — INFOLine, май 2026. Данные о кухне и закупках — из интервью франчайзи на We Project и статьи на Хабре 2018–2019 годов. Полный список — на последнем слайде.</p></div>
+    </details>
+  </section>
+
+  <!-- ============ PREP ============ -->
+  <section class="block prep" id="podgotovka" data-who="all">
+    <h2>Перед защитой</h2>
+    <p class="intro">Что сделать заранее.</p>
+    <ul>
+      <li><b>Впишите всех четырёх на титульный слайд</b><span>Сейчас там только «Слепцов А.С». Добавьте Рубаненко, Дмитриева и Ненашева.</span></li>
+      <li><b>Договоритесь, кто листает слайды</b><span>Проще всего, если каждый листает свои, а пульт передают вместе со словом.</span></li>
+      <li><b>Прогоните текст вслух с секундомером</b><span>Весь текст — около 11 минут в спокойном темпе. Цифры можно не учить: они есть на слайдах.</span></li>
+      <li><b>Если дают 5–7 минут</b><span>Алексей сокращает слайд 5 до одной фразы о Додо ИС и цели на 2030 год. Даниил на слайде 8 оставляет только разницу между снабжением и обеспечением поставок. Лев пропускает слайд 13: заметки к презентации это допускают.</span></li>
+      <li><b>Не читайте с листа слово в слово</b><span>Перескажите своими словами. Комиссия обычно спрашивает того, кто говорит увереннее всех по своей части.</span></li>
+    </ul>
+  </section>
+
+  <footer>Текст составлен по презентации «Додо Пицца анализ бизнес-процессов» (14 слайдов) и заметкам к слайдам. Время по каждому спикеру посчитано при темпе около 120 слов в минуту.</footer>
+</main>
+
+<script>
+(function () {
+  var store = {
+    get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  };
+
+  /* --- per-speaker reading time, from the words actually on the page --- */
+  function fmtMin(m) {
+    var r = Math.round(m * 2) / 2;
+    return '≈ ' + String(r).replace('.', ',') + ' мин';
+  }
+  [1, 2, 3, 4].forEach(function (n) {
+    var sec = document.getElementById('s' + n);
+    var text = '';
+    sec.querySelectorAll('.slide p:not(.stage)').forEach(function (p) { text += ' ' + p.textContent; });
+    var words = text.trim().split(/\s+/).filter(function (w) { return /[А-Яа-яЁёA-Za-z0-9]/.test(w); }).length;
+    document.querySelectorAll('[data-time="' + n + '"]').forEach(function (el) { el.textContent = fmtMin(words / 120); });
+  });
+
+  /* --- speaker filter, routed on #speaker-N --- */
+  function currentView() {
+    var m = /^speaker-([1-4])$/.exec(location.hash.slice(1));
+    return m ? m[1] : 'all';
+  }
+  function applyView() {
+    var v = currentView();
+    document.querySelectorAll('[data-who]').forEach(function (el) {
+      var w = el.getAttribute('data-who');
+      el.hidden = !(v === 'all' || w === 'all' || w === v);
+    });
+    document.querySelectorAll('[data-go]').forEach(function (b) {
+      b.setAttribute('aria-pressed', String(b.getAttribute('data-go') === v));
+    });
+  }
+  document.querySelectorAll('[data-go]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var g = b.getAttribute('data-go');
+      var showAll = (g === 'all' || g === currentView());
+      location.hash = showAll ? 'all' : 'speaker-' + g;
+      applyView();
+      var anchor = showAll ? document.querySelector('.hero') : document.getElementById('s' + g);
+      if (anchor) anchor.scrollIntoView({ block: 'start' });
+    });
+  });
+  window.addEventListener('hashchange', applyView);
+  applyView();
+
+  /* --- large text --- */
+  var root = document.documentElement;
+  var btnLarge = document.getElementById('btn-large');
+  function setLarge(on) {
+    root.classList.toggle('large', on);
+    btnLarge.setAttribute('aria-pressed', String(on));
+    store.set('dodo-large', on ? '1' : '0');
+  }
+  setLarge(store.get('dodo-large') === '1');
+  btnLarge.addEventListener('click', function () { setLarge(!root.classList.contains('large')); });
+
+  /* --- wake lock --- */
+  var statusEl = document.getElementById('status');
+  var btnWake = document.getElementById('btn-wake');
+  var lock = null, wantLock = false;
+  function say(msg) { statusEl.textContent = msg || ''; statusEl.hidden = !msg; }
+  async function acquire() {
+    try {
+      if (!('wakeLock' in navigator)) throw new Error('unsupported');
+      lock = await navigator.wakeLock.request('screen');
+      lock.addEventListener('release', function () { lock = null; btnWake.setAttribute('aria-pressed', String(wantLock && !!lock)); });
+      btnWake.setAttribute('aria-pressed', 'true');
+      say('');
+    } catch (e) {
+      wantLock = false; lock = null;
+      btnWake.setAttribute('aria-pressed', 'false');
+      say('Браузер не разрешил держать экран включённым. Увеличьте время автоблокировки в настройках телефона.');
+    }
+  }
+  btnWake.addEventListener('click', async function () {
+    if (wantLock) {
+      wantLock = false;
+      if (lock) { try { await lock.release(); } catch (e) {} lock = null; }
+      btnWake.setAttribute('aria-pressed', 'false');
+      say('');
+    } else {
+      wantLock = true;
+      await acquire();
+    }
+  });
+  document.addEventListener('visibilitychange', function () {
+    if (wantLock && !lock && document.visibilityState === 'visible') acquire();
+  });
+
+  /* --- rehearsal stopwatch --- */
+  var btnTimer = document.getElementById('btn-timer');
+  var btnReset = document.getElementById('btn-reset');
+  var elapsed = 0, startedAt = 0, tick = null;
+  function fmt(ms) {
+    var s = Math.floor(ms / 1000);
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  }
+  function paintTimer() {
+    var running = tick !== null;
+    var ms = elapsed + (running ? Date.now() - startedAt : 0);
+    btnTimer.textContent = (running ? '❚❚ ' : '▶ ') + fmt(ms);
+    btnTimer.setAttribute('aria-pressed', String(running));
+  }
+  btnTimer.addEventListener('click', function () {
+    if (tick !== null) {
+      elapsed += Date.now() - startedAt; clearInterval(tick); tick = null;
+    } else {
+      startedAt = Date.now(); tick = setInterval(paintTimer, 250);
+    }
+    paintTimer();
+  });
+  btnReset.addEventListener('click', function () {
+    if (tick !== null) { clearInterval(tick); tick = null; }
+    elapsed = 0; paintTimer();
+  });
+})();
+</script>
+</body>
+</html>
