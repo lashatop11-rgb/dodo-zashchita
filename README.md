@@ -2,6 +2,10 @@
 
 Текст выступления для защиты семестровой работы «Анализ бизнес-процессов „Додо Пиццы“» (группа ММ 1-1).
 
+**Сайт:** https://dodo-zashchita.vercel.app
+
+Ссылки на текст одного спикера: [1](https://dodo-zashchita.vercel.app/#speaker-1) · [2](https://dodo-zashchita.vercel.app/#speaker-2) · [3](https://dodo-zashchita.vercel.app/#speaker-3) · [4](https://dodo-zashchita.vercel.app/#speaker-4)
+
 | № | Спикер | Слайды | Тема |
 |---|---|---|---|
 | 1 | Алексей Слепцов | 1–5 | Вступление и описание компании |
